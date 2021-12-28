@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const passport = require('passport');
+const { LocalStrategy, JwtStrategy } = require('./utils/auth');
 const routerApi = require('./routes');
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
@@ -8,6 +10,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(passport.initialize({ session: false }));
+passport.use(LocalStrategy);
+passport.use(JwtStrategy);
 
 const whitelist = ['http://localhost:8080', 'https://myapp.co'];
 const options = {
